@@ -1,0 +1,20 @@
+{
+  "name": "interview-ace-root",
+  "version": "1.0.0",
+  "description": "InterviewAce - The Ultimate Tool to Land Your Dream Job",
+  "scripts": {
+    "client": "cd client && npm run dev",
+    "server": "cd server && source venv/bin/activate && python sesame.py run",
+    "setup:client": "cd client && npm install",
+    "setup:server": "cd server && python3.12 -m venv venv && source venv/bin/activate && pip install -r requirements.txt",
+    "setup:env": "cd server && source venv/bin/activate && python sesame.py init && python sesame.py init-client",
+    "setup": "npm run setup:server && npm run setup:client && npm run setup:env",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "restart": "concurrently --kill-others-on-fail \"npm run server\" \"sleep 5 && npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "author": "",
+  "license": "Apache-2.0"
+} 

@@ -22,7 +22,9 @@ export const useConversations = ({ searchQuery = "" }: Props = {}) => {
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage = [], _allPages, lastPageParam) => {
-      if (lastPage.length < 20) return undefined;
+      if (lastPage.length < 20) {
+        return undefined;
+      }
       return (lastPageParam as number) + 1;
     },
     queryFn: async ({ pageParam }) => {

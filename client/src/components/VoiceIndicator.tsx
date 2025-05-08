@@ -35,9 +35,13 @@ export const VoiceIndicator: React.FC<Props> = ({
     : undefined;
 
   useEffect(() => {
-    if (!rtviClient || !isSpeaking) return;
+    if (!rtviClient || !isSpeaking) {
+      return;
+    }
     const handleLevel = (level: number, p: Participant) => {
-      if (p.local) return;
+      if (p.local) {
+        return;
+      }
       setBotAudioLevel((prevLevel) =>
         level >= prevLevel ? level : prevLevel * 0.5
       );

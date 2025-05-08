@@ -1,6 +1,46 @@
-# Chat Application Starter Kit — Gemini Multimodal Live API + Pipecat
+# 🎯 InterviewAce – Land Your Dream Job
 
-This repo is a starter kit showing how to build a full application using the Pipecat Web SDK and the Gemini Multimodal Live API.
+```
+ ___       _                  _                _            
+|_ _|_ __ | |_ ___ _ ____   _(_) _____      _/ \   ___ ___ 
+ | || '_ \| __/ _ \ '__\ \ / / |/ _ \ \ /\ / / _ \ / __/ _ \
+ | || | | | ||  __/ |   \ V /| |  __/\ V  V / ___ \ (_|  __/
+|___|_| |_|\__\___|_|    \_/ |_|\___| \_/\_/_/   \_\___\___|
+```
+
+**Train Hard. Interview Easy.**
+
+Step into the most realistic, high-pressure mock interviews—designed to match the intensity of companies like Microsoft, Netflix, OpenAI, and more. With zero room for fluff, you'll sharpen your edge, eliminate weak spots, and develop the confidence to conquer any interview.
+
+## Why Settle for Guesswork? Level Up with AI-Powered Mock Interviews
+
+✅ **Hyper-Realistic Practice**  
+Simulate real interview environments tailored to your target role—whether behavioral, technical, product management, design, or niche specialties.
+
+✅ **Personalized, Actionable Feedback**  
+Get detailed, AI-generated insights on your tone, word choice, structure, and substance—so you know exactly what to improve.
+
+✅ **Real-Time Coaching**  
+Our smart speech analysis helps you eliminate filler words, hesitations, and awkward phrasing—coaching you toward clear, confident delivery.
+
+✅ **Progress Tracking**  
+Track improvement across sessions with visual analytics on response quality, pacing, clarity, and confidence.
+
+✅ **Role & Company-Specific Drills**  
+Customize mock interviews to mirror the exact roles and companies you're targeting—from Big Tech giants to startups.
+
+✅ **On-Demand or Scheduled Sessions**  
+Practice whenever inspiration strikes, or book focused sessions on your schedule.
+
+## Practice Like a Pro. Perform Like a Star.
+
+No matter your industry or experience level, InterviewAce adapts to your needs. Prepare smarter with cutting-edge technology that refines your performance, boosts your confidence, and helps you walk into interviews fully prepared and unstoppable.
+
+🚀 Your next big opportunity is waiting. Practice with InterviewAce today—and own the room tomorrow.
+
+## Technical Details
+
+Built with Gemini Multimodal Live API + Pipecat for realistic AI interactions.
 
 <img width="500px" height="auto" src="./image.png">
 
@@ -21,7 +61,55 @@ For realtime apps in production, WebRTC is the right choice. WebRTC was designed
 
 ➡️ To use the WebRTC voice mode, you'll also need a [Daily API key](https://dashboard.daily.co/u/signup) (optional).
 
-### Server setup:
+### Easiest Setup (Using Shell Scripts)
+
+We've provided shell scripts for both Unix/macOS and Windows that handle the entire setup and running process:
+
+**macOS/Linux:**
+```bash
+# Make the script executable (only needed once)
+chmod +x dev.sh
+
+# Set up environment, install dependencies
+./dev.sh setup
+
+# Run both client and server concurrently
+./dev.sh dev
+```
+
+**Windows:**
+```bat
+# Set up environment, install dependencies
+dev.bat setup
+
+# Run both client and server concurrently
+dev.bat dev
+```
+
+You can also run the client or server individually with `./dev.sh client`, `./dev.sh server` (or `dev.bat client`, `dev.bat server` on Windows).
+
+### Alternative Setup (Using npm scripts)
+
+You can also use the npm scripts to set up and run the application:
+
+```bash
+# Install dependencies for both client and server
+npm install
+
+# Set up environment, install dependencies, and configure both applications
+npm run setup
+
+# Run both client and server concurrently
+npm run dev
+```
+
+Visit the URL shown in the terminal (typically http://localhost:5173).
+
+### Manual Setup
+
+If you prefer to set up the client and server separately, follow these instructions:
+
+#### Server setup:
 
 You'll need to use Python version 3.10, 3.11, or 3.12 because of various dependencies. On a Mac, the easiest thing to do is `brew install python@3.12`.
 
@@ -39,7 +127,7 @@ python sesame.py run
 ```
 This will start the Sesame server. You'll need to make note of which port it's running on. Look for a log line that says something like `Uvicorn running on http://127.0.0.1:7860 (Press CTRL+C to quit)`.
 
-### Client setup:
+#### Client setup:
 
 Option 1: Using the Sesame CLI
 
@@ -60,7 +148,7 @@ Option 2: Manually
 
   Open your `.env.local` file and make sure `VITE_SERVER_URL=http://127.0.0.1:7860/api` is using the same port as your Sesame server (defaults to 7860).
 
-### Run the client:
+#### Run the client:
 
 In a new terminal window:
 
@@ -72,94 +160,12 @@ npm run dev
 
 Visit the URL shown in the terminal. Be sure that both the server and client are running.
 
-## Architecture
+## Available Scripts
 
-### Configuration
+In the root directory, you can run:
 
-System instructions and other configuration parameters are in [server/common/config.py](server/common/config.py).
-
-### Storage
-
-In HTTP and WebRTC mode, conversations are stored in a local SQLite database file [server/sesame.db]. If you want to clear your conversation history, just delete this file. Everything is stored in plain text -- this is not meant to be secure or private storage!
-
-Storage is implemented by [bots/persistent_context.py](bots/persistent_context.py). The database schema is defined in [common/models.py](common/models.py).
-
-### Server architecture
-
-The app backend is a FastAPI app.
-
-API endpoints are defined in [webapp/api](webapp/api).
-
-The SDK uses these two endpoints in [webapp/api/bots.py](webapp/api/bots.py) to send an HTTP chat message, and to connect to a WebRTC voice-mode bot:
-
-- /action
-- /connect
-
-The two bot modes are designed to be compatible with each other. Both are implemented as Pipecat pipelines using Gemini models.
-
-The single-turn HTTP pipeline is defined in [`bots/http/bot_pipeline.py`](bots/http/bot_pipeline.py).
-
-The connected-mode WebRTC pipeline is defined in [`bots/webrtc/bot_pipeline.py`](bots/webrtc/bot_pipeline.py).
-
-### Client code
-
-RTVIClient is created in `client/src/components/ClientPage.tsx`.
-
-- `client.action()` is called from `sendTextMessage()` in `client/src/components/ChatControls.tsx`
-- `client.connect()` is called from `handleSwitchToVoiceMode()` in `client/src/components/ChatControls.tsx`
-
-RTVI event handlers are set up by the `useRTVIClientEvent` hook. See:
-
-- `client/src/components/BotReadyAudio.tsx`
-- `client/src/components/ChatControls.tsx`
-- `client/src/components/ChatMessages.tsx`
-- `client/src/components/LiveMessages.tsx`
-
-### HTTP single-turn conversation
-
-Each HTTP conversation turn is triggered by a POST to [/api/bot/action](server/webapp/api/bots.py).
-
-The payload is an Pipecat [RTVI](https://docs.pipecat.ai/client/introduction#about-rtvi) action to execute.
-
-```
-{
-  "conversation_id": "59b50d76-a275-4293-b77f-34d8541cca8a",
-  "actions": [
-    {
-      "label": "rtvi-ai",
-      "type": "action",
-      "data": {
-        "service": "llm",
-        "action": "append_to_messages",
-        "arguments": [
-          {
-            "name": "messages",
-            "value": [
-              {
-                "role": "user",
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "Say \"success\""
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "id": "7fb7ad3c"
-    }
-  ]
-}
-```
-
-### WebRTC connected, multi-turn conversation
-
-Connected conversations start with a call to `client.connect()`. This starts a server-side Pipecat process and connects the bot and the client to a shared WebRTC session.
-
-The Pipecat Client SDK handles all of this on the client side. On the server side:
-
-- /connect is defined in [server/webapp/api/bots.py](server/webapp/api/bots.py)
-- The bot process is started by `bot_launch()` in [server/bots/webrtc/bot.py](server/bots/webrtc/bot.py)
-- The Pipecat pipeline is defined in [server/bots/webrtc/bot_pipeline.py](server/bots/webrtc/bot_pipeline.py)
+| Command | Description |
+|---------|-------------|
+| `npm run setup` | Installs all dependencies and sets up both client and server |
+| `npm run dev` | Runs both client and server concurrently |
+| `npm run restart` | Restarts both client and server (waits 5 seconds for server to start before launching client) |

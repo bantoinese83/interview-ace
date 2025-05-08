@@ -33,7 +33,7 @@ export default function ConversationListItem({ conversation, onClick }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateFailed, setUpdateFailed] = useState(false);
-  const [title, setTitle] = useState(conversation.title ?? "Conversation");
+  const [title, setTitle] = useState(conversation.title ?? "Interview Session");
 
   const handleEditSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -82,7 +82,9 @@ export default function ConversationListItem({ conversation, onClick }: Props) {
   };
 
   useEffect(() => {
-    if (!updateFailed) return;
+    if (!updateFailed) {
+      return;
+    }
     const timeout = setTimeout(() => {
       setUpdateFailed(false);
     }, 3000);
@@ -116,7 +118,7 @@ export default function ConversationListItem({ conversation, onClick }: Props) {
             defaultValue={conversation.title ?? ""}
             name="title"
             pattern="[^\s].+"
-            placeholder="Conversation title"
+            placeholder="Interview session title"
             required
             readOnly={isUpdating}
             title="Please enter a title (no spaces or tabs allowed)"

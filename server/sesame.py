@@ -117,23 +117,21 @@ def handle_env_updates(
                 backup_file = env_file.with_suffix(".backup")
                 shutil.copy2(env_file, backup_file)
                 console.print(f"Created backup of existing .env at {backup_file}", style="yellow")
+        elif env_file.exists():
+            with open(env_file, "r") as f:
+                current_contents = f.readlines()
         else:
-            # For updates, use existing .env or fall back to example
-            if env_file.exists():
-                with open(env_file, "r") as f:
-                    current_contents = f.readlines()
-            else:
-                with open(env_example, "r") as f:
-                    current_contents = f.readlines()
-                console.print("\nNo .env file found, using env.example as template", style="yellow")
+            with open(env_example, "r") as f:
+                current_contents = f.readlines()
+            console.print("\nNo .env file found, using env.example as template", style="yellow")
 
         # Format the updated contents
         updated_contents = format_env_contents(current_contents, env_updates)
-        formatted_text = "".join(updated_contents)
-
         # Handle based on specified action
         if action in ["print", "both"]:
             console.print("\nUpdated environment variables:", style="blue bold")
+            formatted_text = "".join(updated_contents)
+
             syntax = Syntax(
                 formatted_text, "env", theme="monokai", line_numbers=False, word_wrap=True
             )
@@ -153,7 +151,7 @@ def handle_env_updates(
 
     except Exception as e:
         console.print(f"\nError handling .env file: {str(e)}", style="red")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from e
 
 
 def print_success_banner() -> None:
@@ -373,18 +371,18 @@ def init_client():
     if not client_dir.exists():
         console.print("\n✗ Client directory not found at ../client", style="red bold")
 
-        # Ask if they want to specify a different path
-        if Confirm.ask("Would you like to specify the client directory path?"):
-            while True:
-                client_path = Prompt.ask("Enter the path to the client directory")
-                client_dir = Path(client_path)
-                if client_dir.exists():
-                    env_local_file = client_dir / ".env.local"
-                    break
-                console.print(f"\n✗ Directory not found: {client_path}", style="red")
-        else:
+        if not Confirm.ask(
+            "Would you like to specify the client directory path?"
+        ):
             raise typer.Exit(1)
 
+        while True:
+            client_path = Prompt.ask("Enter the path to the client directory")
+            client_dir = Path(client_path)
+            if client_dir.exists():
+                env_local_file = client_dir / ".env.local"
+                break
+            console.print(f"\n✗ Directory not found: {client_path}", style="red")
     # Get port from env or use default
     port = os.getenv("WEBAPP_PORT", "7860")
     server_url = f"http://127.0.0.1:{port}/api"

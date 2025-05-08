@@ -26,7 +26,9 @@ export const ConversationList = ({ onClick }: Props) => {
     !conversations.some((c) => c.conversation_id === conversationId);
 
   useEffect(() => {
-    if (isFetching || !loadingRef.current) return;
+    if (isFetching || !loadingRef.current) {
+      return;
+    }
 
     const intersectionObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -72,7 +74,9 @@ export const ConversationList = ({ onClick }: Props) => {
   const groupedConversations = conversations.reduce(
     (acc: Record<string, ConversationModel[]>, conversation) => {
       const group = formatDateGroup(new Date(conversation.updated_at));
-      if (!acc[group]) acc[group] = [];
+      if (!acc[group]) {
+        acc[group] = [];
+      }
       acc[group].push(conversation);
       return acc;
     },
@@ -127,11 +131,11 @@ export const ConversationList = ({ onClick }: Props) => {
   ) : (
     <>
       <h3 className="text-md font-bold mb-2 text-secondary-foreground">
-        No conversations
+        No interview sessions yet
       </h3>
       {searchQuery && (
         <Button onClick={() => setSearchQuery("")} variant="outline">
-          Reset search query
+          Reset search
         </Button>
       )}
     </>

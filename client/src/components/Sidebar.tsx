@@ -25,7 +25,9 @@ export default function Sidebar() {
     const toggleSidebar = () => setIsOpen((prev) => !prev);
     const updateSidebar = () => invalidate();
     const handleResize = () => {
-      if (window.innerWidth >= 1024) setIsOpen(false);
+      if (window.innerWidth >= 1024) {
+        setIsOpen(false);
+      }
     };
     emitter.on("toggleSidebar", toggleSidebar);
     emitter.on("updateSidebar", updateSidebar);
@@ -56,7 +58,7 @@ export default function Sidebar() {
           onClick={() => setIsOpen(false)}
         >
           <EditIcon size={24} />
-          New conversation
+          New Interview Session
         </PageTransitionLink>
       </div>
 

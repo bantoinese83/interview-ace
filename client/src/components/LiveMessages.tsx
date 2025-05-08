@@ -54,7 +54,9 @@ export default function LiveMessages({
   const client = useRTVIClient();
 
   useEffect(() => {
-    if (!client) return;
+    if (!client) {
+      return;
+    }
     client.params = {
       ...client.params,
       requestData: {
@@ -86,7 +88,9 @@ export default function LiveMessages({
           normalizeMessageText(matchingMessage) ===
             addNewLinesBeforeCodeblocks(text);
 
-        if (isSameMessage) return liveMessages;
+        if (isSameMessage) {
+          return liveMessages;
+        }
 
         if (!matchingMessage || matchingMessage?.final) {
           // Append new message
@@ -144,7 +148,9 @@ export default function LiveMessages({
   const cleanupUserMessages = useCallback(() => {
     setLiveMessages((messages) => {
       return messages.filter((m) => {
-        if (m.content.role !== "user") return true;
+        if (m.content.role !== "user") {
+          return true;
+        }
         const normalizedText = normalizeMessageText(m);
         return normalizedText.length > 0;
       });
@@ -174,8 +180,9 @@ export default function LiveMessages({
     RTVIEvent.BotLlmText,
     useCallback(
       (text: BotLLMTextData) => {
-        if (interactionMode !== "informational" && !isTextResponse.current)
+        if (interactionMode !== "informational" && !isTextResponse.current) {
           return;
+        }
         if (firstBotResponseTime.current) {
           addMessageChunk({
             createdAt: firstBotResponseTime.current,
@@ -196,7 +203,9 @@ export default function LiveMessages({
       const textResponse = isTextResponse.current;
       isTextResponse.current = false;
 
-      if (interactionMode !== "informational" && !textResponse) return;
+      if (interactionMode !== "informational" && !textResponse) {
+        return;
+      }
 
       if (firstBotResponseTime.current) {
         addMessageChunk({
@@ -216,7 +225,9 @@ export default function LiveMessages({
   useRTVIClientEvent(
     RTVIEvent.BotStartedSpeaking,
     useCallback(() => {
-      if (interactionMode !== "conversational") return;
+      if (interactionMode !== "conversational") {
+        return;
+      }
       if (!firstBotResponseTime.current) {
         firstBotResponseTime.current = new Date();
       }
@@ -234,7 +245,9 @@ export default function LiveMessages({
     RTVIEvent.BotTtsText,
     useCallback(
       (text: BotTTSTextData) => {
-        if (interactionMode !== "conversational") return;
+        if (interactionMode !== "conversational") {
+          return;
+        }
         if (firstBotResponseTime.current) {
           addMessageChunk({
             createdAt: firstBotResponseTime.current,
@@ -252,7 +265,9 @@ export default function LiveMessages({
   useRTVIClientEvent(
     RTVIEvent.BotStoppedSpeaking,
     useCallback(() => {
-      if (interactionMode !== "conversational") return;
+      if (interactionMode !== "conversational") {
+        return;
+      }
       const createdAt = firstBotResponseTime.current;
       firstBotResponseTime.current = undefined;
       addMessageChunk({
@@ -359,11 +374,17 @@ export default function LiveMessages({
   }, [addMessageChunk, conversationId, messages.length]);
 
   useEffect(() => {
-    if (!autoscroll) return;
+    if (!autoscroll) {
+      return;
+    }
     const scroller = getScrollableParent(document.querySelector("main"));
-    if (!scroller) return;
+    if (!scroller) {
+      return;
+    }
     const isScrollLocked = document.body.hasAttribute("data-scroll-locked");
-    if (!liveMessages.length) return;
+    if (!liveMessages.length) {
+      return;
+    }
     scroller.scrollTo({
       behavior: isScrollLocked ? "instant" : "smooth",
       top: scroller.scrollHeight,

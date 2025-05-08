@@ -93,7 +93,9 @@ export default function Settings({ vision }: Props) {
 
   useEffect(() => {
     const handleToggle = async () => {
-      if (transportState === "disconnected") gUM();
+      if (transportState === "disconnected") {
+        gUM();
+      }
       setIsOpen((open) => !open);
     };
 

@@ -12,7 +12,9 @@ export default function AutoScrollToBottom({ behavior = "auto" }: Props) {
   useEffect(() => {
     const scroller = getScrollableParent(document.querySelector("main"));
 
-    if (!scroller) return;
+    if (!scroller) {
+      return;
+    }
 
     scroller?.scrollTo({
       behavior,

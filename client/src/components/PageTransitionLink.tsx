@@ -17,9 +17,13 @@ export const PageTransitionLink: React.FC<React.PropsWithChildren<Props>> = ({
 
   const handleClick = (ev: React.MouseEvent<HTMLAnchorElement>) => {
     ev.preventDefault();
-    if (disabled) return;
+    if (disabled) {
+      return;
+    }
     setConversationId(href);
-    if (!href) setConversationType(null);
+    if (!href) {
+      setConversationType(null);
+    }
     onClick?.(ev);
   };
 

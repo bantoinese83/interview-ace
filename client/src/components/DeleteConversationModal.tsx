@@ -49,10 +49,11 @@ export default function DeleteConversationModal() {
       );
       if (response.ok) {
         toast({
-          title: `Conversation "${conversation?.title}" deleted!`,
+          title: `Interview session "${conversation?.title}" deleted!`,
         });
-        if (conversationId === currentConversationId)
+        if (conversationId === currentConversationId) {
           setCurrentConversationId("");
+        }
         setConversationId("");
         emitter.emit("updateSidebar");
       }
@@ -62,21 +63,23 @@ export default function DeleteConversationModal() {
   };
 
   const handleOpenChange = (open: boolean) => {
-    if (!open) setConversationId("");
+    if (!open) {
+      setConversationId("");
+    }
   };
 
   return (
     <Dialog open={Boolean(conversationId)} onOpenChange={handleOpenChange}>
       <DialogContent noCloseButton={isDeleting}>
         <DialogHeader>
-          <DialogTitle>Delete conversation</DialogTitle>
+          <DialogTitle>Delete Interview Session</DialogTitle>
         </DialogHeader>
         <DialogDescription>
           Do you really want to delete{" "}
           {conversation?.title ? (
-            <strong>“{conversation?.title}”</strong>
+            <strong>"{conversation?.title}"</strong>
           ) : (
-            "the conversation"
+            "this interview session"
           )}
           ?
         </DialogDescription>

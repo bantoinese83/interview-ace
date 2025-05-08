@@ -3,6 +3,8 @@ import ChatMessages from "@/components/ChatMessages";
 import DeleteConversationModal from "@/components/DeleteConversationModal";
 import Settings from "@/components/Settings";
 import { Button } from "@/components/ui/button";
+import { BorderBeam } from "@/components/ui/magic-ui/BorderBeam";
+import { SparklesText } from "@/components/ui/magic-ui/SparklesText";
 import {
   Tooltip,
   TooltipContent,
@@ -24,6 +26,10 @@ import {
   DatabaseIcon,
   LoaderCircleIcon,
   XCircleIcon,
+  Briefcase,
+  FileCheck,
+  UserCheck,
+  VideoIcon,
 } from "lucide-react";
 import { useEffect, useLayoutEffect, useState } from "react";
 import PipecatLogo from "./svg/Pipecat";
@@ -65,7 +71,9 @@ export function ClientPage() {
   useEffect(() => {
     if (!conversationType) {
       setClient((prevClient) => {
-        if (prevClient?.connected) prevClient?.disconnect();
+        if (prevClient?.connected) {
+          prevClient?.disconnect();
+        }
         return undefined;
       });
       return;
@@ -98,7 +106,9 @@ export function ClientPage() {
   }, [conversationType, geminiApiKey]);
 
   useEffect(() => {
-    if (!client || !conversationId) return;
+    if (!client || !conversationId) {
+      return;
+    }
     client.params.requestData = {
       ...defaultRequestData,
       ...(client.params.requestData ?? {}),
@@ -111,7 +121,9 @@ export function ClientPage() {
   useLayoutEffect(() => {
     const handleScroll = () => {
       const scroller = document.scrollingElement;
-      if (!scroller) return;
+      if (!scroller) {
+        return;
+      }
       const scrollBottom =
         scroller.scrollHeight - scroller.clientHeight - scroller.scrollTop;
       setShowScrollToBottom(
@@ -125,7 +137,9 @@ export function ClientPage() {
   }, []);
 
   useEffect(() => {
-    if (!client) return;
+    if (!client) {
+      return;
+    }
     const handleChangeLlmModel = (model: string) => {
       if (client.connected) {
         client.updateConfig([
@@ -140,7 +154,7 @@ export function ClientPage() {
           },
         ]);
       } else {
-        const config = client.params.config;
+        const {config} = client.params;
         if (config) {
           const llmConfig = config.find((c) => c.service === "llm");
           client.params.config = [
@@ -178,7 +192,9 @@ export function ClientPage() {
   }, [client]);
 
   useEffect(() => {
-    if (!client) return;
+    if (!client) {
+      return;
+    }
     const isConnected = client.connected;
     const isConnecting =
       client.state === "authenticating" || client.state === "connecting";
@@ -207,74 +223,105 @@ export function ClientPage() {
             <div className="flex flex-col gap-4 items-center justify-center h-full my-auto">
               <VoiceIndicator className="shadow-md" size={72} />
               <h2 className="font-semibold text-xl text-center">
-                Start chatting
+                Ready to begin your interview
               </h2>
+              <p className="text-center text-muted-foreground max-w-md">
+                Start the conversation by introducing yourself and mentioning the position you're interviewing for. Our AI interviewer will guide you through realistic interview questions.
+              </p>
             </div>
           ) : (
             <div className="flex flex-col gap-12 items-center justify-center h-full my-auto">
-              <h2 className="font-light text-2xl text-center text-neutral-700">
-                Select conversation type:
+              <h2 className="font-light text-2xl text-center bg-gradient-to-r from-indigo-600 to-blue-500 text-transparent bg-clip-text">
+                Select your interview mode:
               </h2>
               <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center justify-center">
-                <Button
-                  disabled={!websocketEnabled}
-                  variant="secondary-outline"
-                  className="relative h-full flex flex-col border border-transparent bg-origin-border borderClip bg-cardBorder justify-between gap-2 max-w-72 lg:max-w-80 text-wrap rounded-3xl p-4 lg:p-6 shadow-mid hover:shadow-long hover:bg-cardBorderHover transition-all text-base outline outline-neutral-400/10 outline-0 hover:outline-[7px]"
-                  onClick={() => setConversationType("voice-to-voice")}
+                <BorderBeam 
+                  active={websocketEnabled}
+                  gradientColors="from-indigo-600 via-blue-500 to-indigo-600"
+                  borderRadius="1.5rem"
+                  duration={4}
+                  size={2}
+                  background="bg-transparent"
                 >
-                  {!websocketEnabled && (
-                    <div className="bg-red-200 self-stretch absolute -top-4 left-10 right-10 z-10 rounded-full text-xs py-2 uppercase tracking-wider text-red-900">
-                      Missing GEMINI_API_KEY
+                  <Button
+                    disabled={!websocketEnabled}
+                    variant="secondary-outline"
+                    className="relative h-full w-full flex flex-col border border-transparent bg-white dark:bg-black justify-between gap-2 max-w-72 lg:max-w-80 text-wrap rounded-3xl p-4 lg:p-6 shadow-md hover:shadow-lg transition-all text-base"
+                    onClick={() => setConversationType("voice-to-voice")}
+                  >
+                    {!websocketEnabled && (
+                      <div className="bg-red-200 self-stretch absolute -top-4 left-10 right-10 z-10 rounded-full text-xs py-2 uppercase tracking-wider text-red-900">
+                        Missing GEMINI_API_KEY
+                      </div>
+                    )}
+                    <div className="flex items-center justify-center bg-indigo-100 text-indigo-500 rounded-full p-2">
+                      <Briefcase className="h-16 w-16 p-3" />
                     </div>
-                  )}
-                  <div className="flex items-center justify-center bg-sky-100 text-sky-400 rounded-full">
-                    <AudioWaveformIcon className="h-20 w-20 p-4" />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <strong className="block mt-4 text-lg">
-                      WebSocket Voice-to-Voice
-                    </strong>
-                    <span className="font-light text-neutral-500">
-                      Use your mic to talk with Gemini using a WebSocket.
+                    <div className="flex flex-col gap-2">
+                      <strong className="block mt-4 text-lg">
+                        <SparklesText 
+                          text="Express Interview"
+                          fontSize="text-lg"
+                          color="text-indigo-700"
+                          sparkleColors={["#4F46E5", "#3B82F6", "#6366F1", "#4338CA", "#818CF8"]}
+                        />
+                      </strong>
+                      <span className="font-light text-neutral-500">
+                        Quick audio-only interview practice. Focus purely on your verbal communication skills without distractions.
+                      </span>
+                    </div>
+                    <span className="opacity-80 inline-flex gap-1 items-center mt-4 bg-gray-50 px-3 py-1 rounded-full">
+                      <XCircleIcon className="text-indigo-400" size={16} />
+                      <span className="uppercase font-light text-indigo-700 text-xs tracking-wider">
+                        Sessions not recorded
+                      </span>
                     </span>
-                  </div>
-                  <span className="opacity-50 inline-flex gap-1 items-center mt-4">
-                    <XCircleIcon className="text-destructive" size={16} />
-                    <span className="uppercase font-light text-neutral-700 text-xs tracking-wider">
-                      Conversations not stored
-                    </span>
-                  </span>
-                </Button>
-                <Button
-                  disabled={!webrtcEnabled}
-                  variant="secondary-outline"
-                  className="relative h-full flex flex-col items-center border border-transparent bg-origin-border borderClip bg-cardBorder justify-between gap-2 max-w-72 lg:max-w-80 text-wrap rounded-3xl p-4 lg:p-6 shadow-mid hover:shadow-long hover:bg-cardBorderHover transition-all text-base outline outline-neutral-400/10 outline-0 hover:outline-[7px]"
-                  onClick={() => setConversationType("text-voice")}
+                  </Button>
+                </BorderBeam>
+                
+                <BorderBeam 
+                  active={webrtcEnabled}
+                  gradientColors="from-blue-500 via-cyan-500 to-blue-500"
+                  borderRadius="1.5rem"
+                  duration={4}
+                  size={2}
+                  background="bg-transparent"
                 >
-                  {!webrtcEnabled && (
-                    <div className="bg-red-200 self-stretch absolute -top-4 left-10 right-10 z-10 rounded-full text-xs py-2 uppercase tracking-wider text-red-900">
-                      Missing DAILY_API_KEY
+                  <Button
+                    disabled={!webrtcEnabled}
+                    variant="secondary-outline"
+                    className="relative h-full w-full flex flex-col items-center border border-transparent bg-white dark:bg-black justify-between gap-2 max-w-72 lg:max-w-80 text-wrap rounded-3xl p-4 lg:p-6 shadow-md hover:shadow-lg transition-all text-base"
+                    onClick={() => setConversationType("text-voice")}
+                  >
+                    {!webrtcEnabled && (
+                      <div className="bg-red-200 self-stretch absolute -top-4 left-10 right-10 z-10 rounded-full text-xs py-2 uppercase tracking-wider text-red-900">
+                        Missing DAILY_API_KEY
+                      </div>
+                    )}
+                    <div className="flex items-center justify-center bg-blue-100 text-blue-500 rounded-full p-2">
+                      <VideoIcon className="h-16 w-16 p-3" />
                     </div>
-                  )}
-                  <div className="flex items-center justify-center bg-orange-100 text-orange-400 rounded-full">
-                    <PipecatLogo className="h-20 w-20 p-4" />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <strong className="block mt-4 text-lg">
-                      Pipecat Multi-Modal
-                    </strong>
-                    <span className="font-light text-neutral-500">
-                      Use your mic, camera and keyboard to talk with Gemini
-                      using WebRTC.
+                    <div className="flex flex-col gap-2">
+                      <strong className="block mt-4 text-lg">
+                        <SparklesText 
+                          text="Premium Interview"
+                          fontSize="text-lg"
+                          color="text-blue-700"
+                          sparkleColors={["#0EA5E9", "#3B82F6", "#38BDF8", "#0284C7", "#7DD3FC"]}
+                        />
+                      </strong>
+                      <span className="font-light text-neutral-500">
+                        Complete interview simulation with audio, video, and detailed performance analytics. Perfect for serious preparation.
+                      </span>
+                    </div>
+                    <span className="opacity-80 inline-flex gap-1 items-center mt-4 bg-gray-50 px-3 py-1 rounded-full">
+                      <DatabaseIcon className="text-blue-400" size={16} />
+                      <span className="uppercase font-light text-blue-700 text-xs tracking-wider">
+                        Sessions recorded for review
+                      </span>
                     </span>
-                  </div>
-                  <span className="opacity-50 inline-flex gap-1 items-center mt-4">
-                    <DatabaseIcon className="text-green-400" size={16} />
-                    <span className="uppercase font-light text-neutral-700 text-xs tracking-wider">
-                      Conversations stored
-                    </span>
-                  </span>
-                </Button>
+                  </Button>
+                </BorderBeam>
               </div>
             </div>
           )}

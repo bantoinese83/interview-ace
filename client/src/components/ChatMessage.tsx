@@ -38,7 +38,9 @@ const contentForErrorBoundary = (content: unknown): React.ReactNode => {
   if (Array.isArray(content)) {
     return Children.map(content, contentForErrorBoundary);
   }
-  if (typeof content === "object") return JSON.stringify(content, null, 2);
+  if (typeof content === "object") {
+    return JSON.stringify(content, null, 2);
+  }
   return content?.toString() ?? "undefined";
 };
 
@@ -71,6 +73,11 @@ export default function ChatMessage({ isSpeaking = false, message }: Props) {
     setSelectedImage("");
   };
 
+  // Role labels for the interview context
+  const roleLabel = message.content.role === "assistant" 
+    ? "Interviewer" 
+    : "You";
+
   return (
     <div
       className={cn("relative w-auto max-w-full overflow-x-hidden", {
@@ -91,6 +98,11 @@ export default function ChatMessage({ isSpeaking = false, message }: Props) {
           "bg-secondary rounded-3xl": message.content.role === "user",
         })}
       >
+        {/* Role Label */}
+        <div className="text-xs font-semibold text-muted-foreground mb-1">
+          {roleLabel}
+        </div>
+        
         <ErrorBoundary
           fallback={
             <div className="flex flex-col gap-2">

@@ -87,12 +87,47 @@ export default {
           "87.5%": { transform: "translate(-50%, -50%) translate(-3px, -3px)" }, // Top-left
           "100%": { transform: "translate(-50%, -50%) translate(0px, -4px)" }, // Back to top
         },
+        fadeIn: {
+          from: { 
+            opacity: "0", 
+            transform: "translateY(10px)" 
+          },
+          to: { 
+            opacity: "1", 
+            transform: "translateY(0)" 
+          },
+        },
+        'sparkle-fade': {
+          '0%': { 
+            opacity: '0',
+            transform: 'scale(0) rotate(0deg)'
+          },
+          '50%': { 
+            opacity: '1',
+            transform: 'scale(1) rotate(90deg)'
+          },
+          '100%': { 
+            opacity: '0',
+            transform: 'scale(0) rotate(180deg)'
+          }
+        },
+        'border-beam-rotation': {
+          '0%': { 
+            transform: 'rotate(0deg)'
+          },
+          '100%': { 
+            transform: 'rotate(360deg)'
+          }
+        }
       },
       animation: {
         appear: "appear 0.5s ease-out forwards",
         rotateSway: "rotateSway 1.5s ease-in-out infinite",
         pulseGrow: "pulseGrow 2.5s ease-in-out infinite",
         orbit: "orbit 4s linear infinite",
+        fadeIn: "fadeIn 0.3s ease-out forwards",
+        'sparkle-fade': 'sparkle-fade 700ms ease-in-out forwards',
+        'border-beam-rotation': 'border-beam-rotation 2s linear infinite'
       },
       animationDuration: {
         "2s": "2000ms",

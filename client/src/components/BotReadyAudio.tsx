@@ -12,7 +12,9 @@ export default function BotReadyAudio({ active }: Props) {
   useRTVIClientEvent(
     RTVIEvent.BotReady,
     useCallback(() => {
-      if (!active) return;
+      if (!active) {
+        return;
+      }
       audioRef.current?.play();
     }, [active]),
   );

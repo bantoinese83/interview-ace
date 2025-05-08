@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/select";
 import { useAppState } from "@/hooks/useAppState";
 import emitter from "@/lib/eventEmitter";
-import { Menu, Settings2 } from "lucide-react";
+import { Menu, Settings2, Target, Sparkles, Briefcase, Award } from "lucide-react";
 import React, { useState } from "react";
 
-const model = "gemini2";
+const model = "InterviewAce Pro";
 
 const Navbar: React.FC = () => {
   const { conversationType } = useAppState();
@@ -36,6 +36,18 @@ const Navbar: React.FC = () => {
         <Menu className="w-6 h-6" />
       </button>
 
+      {/* App Title with custom logo - always visible */}
+      <div className="flex items-center gap-2 font-bold text-lg md:text-xl">
+        <div className="flex items-center justify-center bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-lg p-1.5">
+          <Briefcase className="w-5 h-5" />
+          <Award className="w-3 h-3 absolute -right-1 -top-1 text-amber-400" />
+        </div>
+        <div className="hidden md:flex items-center">
+          <span className="text-indigo-600 font-extrabold">Interview</span>
+          <span className="text-blue-500 font-extrabold">Ace</span>
+        </div>
+      </div>
+
       {!!conversationType && (
         <Select
           disabled
@@ -49,7 +61,7 @@ const Navbar: React.FC = () => {
             <SelectValue>{model}</SelectValue>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={model}>Gemini 2</SelectItem>
+            <SelectItem value={model}>{model}</SelectItem>
           </SelectContent>
         </Select>
       )}
@@ -58,7 +70,7 @@ const Navbar: React.FC = () => {
       {!!conversationType && (
         <Button
           variant="outline"
-          className="rounded-full ms-auto gap-1"
+          className="rounded-full ms-auto gap-1 border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"
           onClick={handleSettingsToggle}
         >
           <Settings2 size={16} />

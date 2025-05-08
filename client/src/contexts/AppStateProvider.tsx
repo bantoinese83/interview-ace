@@ -49,8 +49,12 @@ export const AppStateProvider: React.FC<React.PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     const searchParams = new URLSearchParams();
-    if (conversationId) searchParams.append(C, conversationId);
-    if (searchQuery) searchParams.append(Q, searchQuery);
+    if (conversationId) {
+      searchParams.append(C, conversationId);
+    }
+    if (searchQuery) {
+      searchParams.append(Q, searchQuery);
+    }
     history.replaceState(null, "", `/?${searchParams.toString()}`);
   }, [conversationId, searchQuery]);
 

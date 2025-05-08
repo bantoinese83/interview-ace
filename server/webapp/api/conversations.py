@@ -65,8 +65,7 @@ async def get_conversations(
     # If a query is provided, search by conversation ID
     if q:
         result = await db.execute(select(Conversation).where(Conversation.conversation_id == q))
-        conversation = result.scalar_one_or_none()
-        if conversation:
+        if conversation := result.scalar_one_or_none():
             return [ConversationModel.model_validate(conversation)]
         else:
             raise HTTPException(status_code=404, detail="Conversation not found")
@@ -168,9 +167,7 @@ async def update_conversation(
     if not conversation:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Conversation not found")
 
-    update_data = conversation_update.model_dump(exclude_unset=True)
-
-    if update_data:
+    if update_data := conversation_update.model_dump(exclude_unset=True):
         await db.execute(
             update(Conversation)
             .where(Conversation.conversation_id == conversation_id)
