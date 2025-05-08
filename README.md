@@ -29,8 +29,9 @@ Track improvement across sessions with visual analytics on response quality, pac
 ✅ **Role & Company-Specific Drills**  
 Customize mock interviews to mirror the exact roles and companies you're targeting—from Big Tech giants to startups.
 
-✅ **On-Demand or Scheduled Sessions**  
-Practice whenever inspiration strikes, or book focused sessions on your schedule.
+✅ **Two Interview Modes**  
+- **Express Interview**: Quick audio-only practice to focus purely on verbal communication
+- **Premium Interview**: Complete simulation with audio, video, and detailed performance analytics
 
 ## Practice Like a Pro. Perform Like a Star.
 
@@ -38,134 +39,48 @@ No matter your industry or experience level, InterviewAce adapts to your needs. 
 
 🚀 Your next big opportunity is waiting. Practice with InterviewAce today—and own the room tomorrow.
 
-## Technical Details
+## Getting Started
 
-Built with Gemini Multimodal Live API + Pipecat for realistic AI interactions.
+### Prerequisites
 
-<img width="500px" height="auto" src="./image.png">
+➡️ You will need a [Gemini API key](https://aistudio.google.com/app/apikey) for the Express Interview mode.
 
-**Features:**
+➡️ For the Premium Interview mode, you'll also need a [Daily API key](https://dashboard.daily.co/u/signup).
 
-- Ephemeral WebSocket voice mode
-- Text and image HTTP chat mode
-- WebRTC voice, camera, and screenshare chat mode
-- Persistent conversation storage to a SQLite database
-
-The Pipecat SDK supports both WebSockets and WebRTC. WebSockets are great for protoyping, and for server-to-server communication.
-
-For realtime apps in production, WebRTC is the right choice. WebRTC was designed specifically for low-latency audio and video. (See [this explainer](https://www.daily.co/videosaurus/websockets-and-webrtc/) for more about WebRTC and WebSockets.)
-
-## Getting setup
-
-➡️ You will need a [Gemini API key](https://aistudio.google.com/app/apikey).
-
-➡️ To use the WebRTC voice mode, you'll also need a [Daily API key](https://dashboard.daily.co/u/signup) (optional).
-
-### Easiest Setup (Using Shell Scripts)
-
-We've provided shell scripts for both Unix/macOS and Windows that handle the entire setup and running process:
-
-**macOS/Linux:**
-```bash
-# Make the script executable (only needed once)
-chmod +x dev.sh
-
-# Set up environment, install dependencies
-./dev.sh setup
-
-# Run both client and server concurrently
-./dev.sh dev
-```
-
-**Windows:**
-```bat
-# Set up environment, install dependencies
-dev.bat setup
-
-# Run both client and server concurrently
-dev.bat dev
-```
-
-You can also run the client or server individually with `./dev.sh client`, `./dev.sh server` (or `dev.bat client`, `dev.bat server` on Windows).
-
-### Alternative Setup (Using npm scripts)
-
-You can also use the npm scripts to set up and run the application:
+### Quick Setup
 
 ```bash
+# Clone the repository
+git clone https://github.com/bantoinese83/interview-ace.git
+cd interview-ace
+
 # Install dependencies for both client and server
-npm install
-
-# Set up environment, install dependencies, and configure both applications
 npm run setup
 
-# Run both client and server concurrently
+# Start the application
 npm run dev
 ```
 
-Visit the URL shown in the terminal (typically http://localhost:5173).
+Visit the application at http://localhost:5173 and start practicing for your next interview!
 
-### Manual Setup
+## Features
 
-If you prefer to set up the client and server separately, follow these instructions:
+- **AI-Powered Interviewer**: Realistic and challenging questions based on your target role
+- **Multi-Modal Support**: Practice with audio-only or full audio/video interviews
+- **Performance Analytics**: Get feedback on your communication style and content
+- **Interview Session Storage**: Review past practice sessions to track your progress
+- **Customizable Experience**: Focus on specific types of questions or industries
 
-#### Server setup:
+## Technology
 
-You'll need to use Python version 3.10, 3.11, or 3.12 because of various dependencies. On a Mac, the easiest thing to do is `brew install python@3.12`.
+InterviewAce is built with:
 
-```bash
-cd server
-python3.12 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+- React and TypeScript for the frontend
+- Python (FastAPI) for the backend
+- Gemini Multimodal Live API for AI interviewer capabilities
+- Pipecat SDK for real-time communication
+- TailwindCSS and shadcn/ui for beautiful UI components
 
-# Initialize the project
-python sesame.py init
+---
 
-# Run the server
-python sesame.py run
-```
-This will start the Sesame server. You'll need to make note of which port it's running on. Look for a log line that says something like `Uvicorn running on http://127.0.0.1:7860 (Press CTRL+C to quit)`.
-
-#### Client setup:
-
-Option 1: Using the Sesame CLI
-
-- From within the `server` directory:
-
-  ```bash
-  python sesame.py init-client
-  ```
-
-Option 2: Manually
-
-- You can manually create the `.env.local` file in the `./client` directory:
-
-  ```bash
-  cd client
-  cp env.example .env.local
-  ```
-
-  Open your `.env.local` file and make sure `VITE_SERVER_URL=http://127.0.0.1:7860/api` is using the same port as your Sesame server (defaults to 7860).
-
-#### Run the client:
-
-In a new terminal window:
-
-```bash
-cd client
-npm install
-npm run dev
-```
-
-Visit the URL shown in the terminal. Be sure that both the server and client are running.
-
-## Available Scripts
-
-In the root directory, you can run:
-
-| Command | Description |
-|---------|-------------|
-| `npm run setup` | Installs all dependencies and sets up both client and server |
-| `npm run dev` | Runs both client and server concurrently |
-| `npm run restart` | Restarts both client and server (waits 5 seconds for server to start before launching client) |
+Designed and developed to help you ace your next interview. Good luck with your job search!
